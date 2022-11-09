@@ -4,7 +4,7 @@ const Web3 = require("web3");
 const compiledFactory = require("./build/CampaignFactory.json");
 const provider = new HDWalletProvider(
   "observe ranch lobster keep tuna whisper eyebrow organ struggle penalty winter jealous",
-  "https://rinkeby.infura.io/v3/79c1636048614f3aab07a364b9242aa8"
+  "https://goerli.infura.io/v3/49f8408ee7364cbf81ff4b010c965d52"
 );
 
 const web3 = new Web3(provider);
@@ -21,7 +21,7 @@ const deploy = async () => {
     })
     .send({ from: list[0], gas: "1000000" });
   provider.engine.stop();
-  //   console.log(interface);
+  console.log(compiledFactory.interface);
   console.log(contract.options.address);
 };
 deploy();
