@@ -1,20 +1,37 @@
 import React, { Component } from "react";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
-import { Button, Form, Checkbox, Input } from "semantic-ui-react";
+import { Button, Form, Checkbox, Input, Message } from "semantic-ui-react";
+import { Router } from "../../routes";
 import Layout from "../../components/Layout";
+
 class CampaignNew extends Component {
   state = {
     minimumContribution: "",
+    errorMessage: "",
+    loading: false,
   };
   async submittionHandler(event) {
-    // event.preventDefault();
-    console.log(this.state.minimumContribution);
-    const accounts = await web3.eth.getAccounts();
-    await factory.methods.createCampaign(this.state.minimumContribution).send({
-      from: accounts[0],
-    });
+    await ethereum.enable();
+    event.preventDefault();
+    this.setState({ loading: true, errorMessage: "" });
+    // console.log(this.state.minimumContribution);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
+
+      await factory.methods
+        .createCampaign(this.state.minimumContribution)
+        .send({
+          from: accounts[0],
+        });
+      this.setState({ loading: true });
+      Router.pushRoute("/");
+    } catch (error) {
+      this.setState({ errorMessage: error.message, loading: false });
+    }
   }
+
   onChange(event) {
     this.setState({ minimumContribution: event.target.value });
     console.log(this.state.minimumContribution);
@@ -25,7 +42,10 @@ class CampaignNew extends Component {
         <div>
           <h1>Create a new Campaign</h1>
         </div>
-        <Form onSubmit={(e) => this.submittionHandler(e)}>
+        <Form
+          onSubmit={(e) => this.submittionHandler(e)}
+          error={!!this.state.errorMessage}
+        >
           <Form.Field>
             <label>Minimum Contribution</label>
             <Input
@@ -42,8 +62,10 @@ class CampaignNew extends Component {
           <Form.Field>
             <Checkbox label="I agree to the Terms and Conditions" />
           </Form.Field>
-          <Button primary type="submit">
-            Submit
+          {/* error message */}
+          <Message error header="Oops!" content={this.state.errorMessage} />
+          <Button loading={this.state.loading} primary type="submit">
+            Create
           </Button>
         </Form>
       </Layout>

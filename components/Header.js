@@ -1,15 +1,20 @@
 import React from "react";
 import { Menu } from "semantic-ui-react";
+import { Link } from "../routes";
 const Header = () => {
   return (
     <Menu style={{ margin: "10px" }}>
-      <Menu.Item>HandOver</Menu.Item>
+      <Link route="/">
+        <a className="item">HandOver</a>
+      </Link>
 
-      <Menu.Item>Campaigns</Menu.Item>
-      {/* // */}
       <Menu.Menu position="right">
-        {/* <Menu.Item>Help</Menu.Item> */}
-        <Menu.Item>+</Menu.Item>
+        <Link route="/">
+          <a className="item">Campiagns</a>
+        </Link>
+        <Link route="/campaigns/new">
+          <a className="item">+</a>
+        </Link>
       </Menu.Menu>
     </Menu>
   );
